@@ -9,6 +9,8 @@ ROUND_CLIENT_NUM: int = 10   # 每輪參與訓練的 Client 數量
 # --- 訓練超參數 ---
 BATCH_SIZE: int = 32
 EPOCHS: int = 10
+LEARNING_RATE: float = 0.01
+MOMENTUM: float = 0.5
 
 # --- 攻擊類型定義 ---
 class AttackType(Enum):

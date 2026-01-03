@@ -13,7 +13,7 @@ def train(net: nn.Module, trainloader: DataLoader, epochs: int, device: torch.de
     標準訓練函式：執行本地訓練迴圈。
     """
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+    optimizer = optim.SGD(net.parameters(), lr=LEARNING_RATE, momentum=MOMENTUM)
     net.train()
     for _ in range(epochs):
         for images, labels in trainloader:
