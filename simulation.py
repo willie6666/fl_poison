@@ -23,7 +23,7 @@ def start_fl_simulation(malicious_clients: list) -> None:
         
         # 取得客戶端 ID (cid)
         try:
-            cid = context.partition_id
+            cid = int(context.partition_id)
         except AttributeError:
             cid = int(context.node_id) % NUM_CLIENTS
 

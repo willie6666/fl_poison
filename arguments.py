@@ -1,8 +1,13 @@
 from enum import Enum
 
+class DatasetType(Enum):
+    FASHION_MNIST = "fashion_mnist"
+    CIFAR10 = "cifar10"
+
 # --- 聯邦學習伺服器設定 (Server) ---
+DATASET: DatasetType = DatasetType.CIFAR10      # 可選 DatasetType.FASHION_MNIST 或 DatasetType.CIFAR10
 SAMPLE_SIZE: int = 1000      # 每個 Client 的樣本數
-NUM_ROUNDS: int = 10         # 總訓練輪數
+NUM_ROUNDS: int = 5         # 總訓練輪數
 NUM_CLIENTS: int = 50        # 總 Client 數量
 ROUND_CLIENT_NUM: int = 10   # 每輪參與訓練的 Client 數量
 
@@ -24,7 +29,7 @@ ATTACK_TYPE: AttackType = AttackType.NONE
 NUM_POISONED_CLIENTS: int = 25
 SOURCE_LABEL: int = 1
 TARGET_LABEL: int = 9
-ATTACK_ROUND: int = 5 # For timing and availability
+ATTACK_ROUND: int = 3 # For timing and availability
 POISON_PROBABILITY: float = 0.75 # For availability
 
 

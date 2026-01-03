@@ -11,7 +11,7 @@ import logging
 
 from model import Net
 from dataset import get_testset_loader
-from arguments import SOURCE_LABEL, TARGET_LABEL, RESULT_INDEX
+from arguments import SOURCE_LABEL, TARGET_LABEL, RESULT_INDEX, DATASET, DatasetType
 
 # 設定路徑
 MODEL_PATH: str = f"results/{RESULT_INDEX}/final_model.pth"
@@ -148,8 +148,9 @@ def analyze_updates_pca(result_dir: str, analyze_dir: str) -> None:
         
         # 提取全連接層 (fc.weight) 的更新差值
         # fc.weight shape: [10, 1568]
-        if "fc.weight" in start_state and "fc.weight" in end_state:
-            diff = (end_state["fc.weight"] - start_state["fc.weight"]).numpy()
+        layer_name = "fc2.weight" if DATASET == DatasetType.CIFAR10 else "fc.weight"
+        if layer_name in start_state and layer_name in end_state:
+            diff = (end_state[layer_name] - start_state[layer_name]).numpy()
             for class_idx in range(10):
                 updates_per_class[class_idx].append((diff[class_idx], is_malicious))
 

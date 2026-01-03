@@ -22,6 +22,7 @@ def main() -> None:
 
     # 3. 儲存本次實驗的配置資訊
     config_info = {
+        "DATASET": DATASET.value,
         "SAMPLE_SIZE": SAMPLE_SIZE,
         "NUM_ROUNDS": NUM_ROUNDS,
         "NUM_CLIENTS": NUM_CLIENTS,

@@ -2,20 +2,29 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader, Dataset
+from arguments import DATASET, DatasetType
 
 def get_testset_loader() -> DataLoader:
     """
-    取得 FashionMNIST 測試集的 DataLoader。
+    取得測試集的 DataLoader。
     
     Returns:
         DataLoader: 測試集資料載入器。
     """
-    transform = transforms.Compose(
-        [transforms.ToTensor(),
-         transforms.Normalize((0.5,), (0.5,))])
-    
-    testset = torchvision.datasets.FashionMNIST(root='./data', train=False,
-                                           download=True, transform=transform)
+    if DATASET == DatasetType.FASHION_MNIST:
+        transform = transforms.Compose(
+            [transforms.ToTensor(),
+             transforms.Normalize((0.5,), (0.5,))])
+        testset = torchvision.datasets.FashionMNIST(root='./data', train=False,
+                                               download=True, transform=transform)
+    elif DATASET == DatasetType.CIFAR10:
+        transform = transforms.Compose(
+            [transforms.ToTensor(),
+             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+        testset = torchvision.datasets.CIFAR10(root='./data', train=False,
+                                               download=True, transform=transform)
+    else:
+        raise ValueError(f"Unknown dataset: {DATASET}")
     
     testloader = torch.utils.data.DataLoader(testset, batch_size=32,
                                              shuffle=False)
@@ -23,17 +32,26 @@ def get_testset_loader() -> DataLoader:
 
 def get_trainset() -> Dataset:
     """
-    取得 FashionMNIST 訓練集的 Dataset 物件。
+    取得訓練集的 Dataset 物件。
     
     Returns:
         Dataset: 訓練集資料集。
     """
-    transform = transforms.Compose(
-        [transforms.ToTensor(),
-         transforms.Normalize((0.5,), (0.5,))])
-    
-    trainset = torchvision.datasets.FashionMNIST(root='./data', train=True,
-                                            download=True, transform=transform)
+    if DATASET == DatasetType.FASHION_MNIST:
+        transform = transforms.Compose(
+            [transforms.ToTensor(),
+             transforms.Normalize((0.5,), (0.5,))])
+        trainset = torchvision.datasets.FashionMNIST(root='./data', train=True,
+                                                download=True, transform=transform)
+    elif DATASET == DatasetType.CIFAR10:
+        transform = transforms.Compose(
+            [transforms.ToTensor(),
+             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+        trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
+                                                download=True, transform=transform)
+    else:
+        raise ValueError(f"Unknown dataset: {DATASET}")
+        
     return trainset
 
 class PoisonedDataset(Dataset):
