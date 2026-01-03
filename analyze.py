@@ -77,10 +77,6 @@ def test(net: nn.Module, testloader: DataLoader, device: torch.device) -> Tuple[
     logger.info(f"Loss: {avg_loss:.4f}")
     logger.info(f"Overall Accuracy: {accuracy:.4f}")
     
-    # FashionMNIST 類別名稱
-    classes = ('T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
-               'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle Boot')
-
     logger.info("\nPer-class Accuracy:")
     for i in range(10):
         if class_total[i] > 0:
@@ -91,9 +87,9 @@ def test(net: nn.Module, testloader: DataLoader, device: torch.device) -> Tuple[
                 marker = f" <--- Source Label (Targeted)"
             elif i == TARGET_LABEL:
                 marker = f" <--- Target Label (Poisoned)"
-            logger.info(f'Accuracy of {classes[i]:<12} (Class {i}): {acc:.2f} %{marker}')
+            logger.info(f'Accuracy of Class {i}: {acc:.2f} %{marker}')
         else:
-            logger.info(f'Accuracy of {classes[i]:<12} (Class {i}): N/A')
+            logger.info(f'Accuracy of Class {i}: N/A')
 
     return avg_loss, accuracy
 
@@ -181,21 +177,15 @@ def analyze_updates_pca(result_dir: str, analyze_dir: str) -> None:
         
         if np.any(benign_mask):
             plt.scatter(pca_result[benign_mask, 0], pca_result[benign_mask, 1], 
-                        c='blue', alpha=0.5, marker='o', label='Benign')
+                        c='blue', alpha=0.5, marker='o')
         
         if np.any(malicious_mask):
-            plt.scatter(pca_result[malicious_mask, 0], pca_result[malicious_mask, 1], 
-                        c='red', alpha=0.8, marker='x', label='Malicious')
             plt.scatter(pca_result[malicious_mask, 0], pca_result[malicious_mask, 1], 
                         c='red', alpha=0.8, marker='x')
 
         plt.title(f"PCA of Weight Updates - Class {class_idx}")
         if class_idx == SOURCE_LABEL: plt.title(f"PCA of Weight Updates - Class {class_idx} (Source)")
         elif class_idx == TARGET_LABEL: plt.title(f"PCA of Weight Updates - Class {class_idx} (Target)")
-        
-        plt.xlabel("PC 1")
-        plt.ylabel("PC 2")
-        plt.legend()
         
         save_path = os.path.join(analyze_dir, f"pca_{class_idx}.png")
         plt.savefig(save_path)
