@@ -18,7 +18,7 @@ class AttackType(Enum):
     MALICIOUS_PARTICIPANT_AVAILABILITY = "malicious_participant_availability" # 惡意參與者可用性 (特定輪數才出現)
 
 # --- 攻擊配置 ---
-ATTACK_TYPE: AttackType = AttackType.MALICIOUS_PARTICIPANT_AVAILABILITY
+ATTACK_TYPE: AttackType = AttackType.NONE
 NUM_POISONED_CLIENTS: int = 25
 SOURCE_LABEL: int = 1
 TARGET_LABEL: int = 9
@@ -26,4 +26,4 @@ ATTACK_ROUND: int = 5 # For timing and availability
 POISON_PROBABILITY: float = 0.75 # For availability
 
 
-RESULT_INDEX = 24
+RESULT_INDEX = 0

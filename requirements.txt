@@ -2,6 +2,5 @@ flwr[simulation]
 torch
 torchvision
 numpy
-ray[default]
 scikit-learn
 matplotlib
