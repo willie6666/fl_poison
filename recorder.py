@@ -83,6 +83,17 @@ def save_model(model_state_dict: OrderedDict, round_num: int, is_final: bool = F
         torch.save(model_state_dict, final_path)
         get_logger().info(f"Final model saved to {final_path}")
 
+def save_global_start_model(model_state_dict: OrderedDict, round_num: int) -> None:
+    """
+    儲存每一輪開始時的全域模型。
+    """
+    round_models_dir = os.path.join(_result_dir, "models", "round")
+    os.makedirs(round_models_dir, exist_ok=True)
+    
+    save_path = os.path.join(round_models_dir, f"round_{round_num}_start.pth")
+    torch.save(model_state_dict, save_path)
+    get_logger().info(f"Global start model saved to {save_path}")
+
 def save_client_model(model_state_dict: OrderedDict, cid: int, round_num: int, stage: str) -> None:
     """
     儲存個別 Client 的模型權重。

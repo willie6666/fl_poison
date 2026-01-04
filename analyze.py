@@ -121,9 +121,9 @@ def analyze_updates_pca(result_dir: str, analyze_dir: str) -> None:
     # updates_per_class[class_idx] = [(vector, is_malicious), ...]
     updates_per_class = {i: [] for i in range(10)}
     
-    # 找出所有的 round 和 cid 組合，配對 start 與 end 模型
+    # 找出所有的 client end 模型
     files = os.listdir(models_dir)
-    pairs = {} # (round, cid) -> {"start": path, "end": path}
+    client_updates = [] # (round, cid, end_model_path)
     
     for f in files:
         if not f.endswith(".pth"): continue
@@ -131,18 +131,25 @@ def analyze_updates_pca(result_dir: str, analyze_dir: str) -> None:
         if len(parts) != 3: continue
         
         r_num, cid, stage = int(parts[0]), int(parts[1]), parts[2]
-        key = (r_num, cid)
-        if key not in pairs: pairs[key] = {}
-        pairs[key][stage] = os.path.join(models_dir, f)
+        if stage == "end":
+            client_updates.append((r_num, cid, os.path.join(models_dir, f)))
 
-    logger.info(f"Found {len(pairs)} client-round update pairs.")
+    logger.info(f"Found {len(client_updates)} client updates.")
 
-    for (r_num, cid), stages in pairs.items():
-        if "start" not in stages or "end" not in stages:
-            continue
+    # 快取 Global Start Models 以避免重複讀取
+    global_start_models = {} # round -> state_dict
+
+    for r_num, cid, end_path in client_updates:
+        # 載入 Global Start Model
+        if r_num not in global_start_models:
+            start_path = os.path.join(result_dir, "models", "round", f"round_{r_num}_start.pth")
+            if not os.path.exists(start_path):
+                logger.warning(f"Global start model for round {r_num} not found at {start_path}. Skipping.")
+                continue
+            global_start_models[r_num] = torch.load(start_path, map_location="cpu")
         
-        start_state = torch.load(stages["start"], map_location="cpu")
-        end_state = torch.load(stages["end"], map_location="cpu")
+        start_state = global_start_models[r_num]
+        end_state = torch.load(end_path, map_location="cpu")
         
         is_malicious = cid in malicious_clients
         

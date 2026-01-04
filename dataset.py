@@ -18,9 +18,11 @@ def get_testset_loader() -> DataLoader:
         testset = torchvision.datasets.FashionMNIST(root='./data', train=False,
                                                download=True, transform=transform)
     elif DATASET == DatasetType.CIFAR10:
-        transform = transforms.Compose(
-            [transforms.ToTensor(),
-             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+        normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+            normalize
+        ])
         testset = torchvision.datasets.CIFAR10(root='./data', train=False,
                                                download=True, transform=transform)
     else:
@@ -44,9 +46,13 @@ def get_trainset() -> Dataset:
         trainset = torchvision.datasets.FashionMNIST(root='./data', train=True,
                                                 download=True, transform=transform)
     elif DATASET == DatasetType.CIFAR10:
-        transform = transforms.Compose(
-            [transforms.ToTensor(),
-             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+        normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        transform = transforms.Compose([
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomCrop(32, 4),
+            transforms.ToTensor(),
+            normalize
+        ])
         trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
                                                 download=True, transform=transform)
     else:

@@ -6,14 +6,14 @@ class DatasetType(Enum):
 
 # --- 聯邦學習伺服器設定 (Server) ---
 DATASET: DatasetType = DatasetType.CIFAR10      # 可選 DatasetType.FASHION_MNIST 或 DatasetType.CIFAR10
-SAMPLE_SIZE: int = 1000      # 每個 Client 的樣本數
-NUM_ROUNDS: int = 5         # 總訓練輪數
+SAMPLE_SIZE: int = 2500      # 每個 Client 的樣本數
+NUM_ROUNDS: int = 7         # 總訓練輪數
 NUM_CLIENTS: int = 50        # 總 Client 數量
 ROUND_CLIENT_NUM: int = 10   # 每輪參與訓練的 Client 數量
 
 # --- 訓練超參數 ---
-BATCH_SIZE: int = 32
-EPOCHS: int = 10
+BATCH_SIZE: int = 16
+EPOCHS: int = 5
 LEARNING_RATE: float = 0.01
 MOMENTUM: float = 0.5
 

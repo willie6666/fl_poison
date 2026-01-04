@@ -22,10 +22,7 @@ def start_fl_simulation(malicious_clients: list) -> None:
         DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         
         # 取得客戶端 ID (cid)
-        try:
-            cid = int(context.partition_id)
-        except AttributeError:
-            cid = int(context.node_id) % NUM_CLIENTS
+        cid = int(context.node_config["partition-id"])
 
         # 固定隨機種子以確保資料一致性
         np.random.seed(cid)

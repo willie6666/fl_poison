@@ -47,16 +47,11 @@ class SaveModelStrategy(fl.server.strategy.FedAvg):
             # 預設選擇邏輯
             client_instructions = super().configure_fit(server_round, parameters, client_manager)
         
-        # 注入回合資訊並儲存訓練前模型 (start)
-        if client_instructions:
-            ndarrays = fl.common.parameters_to_ndarrays(parameters)
-            params_dict = zip(Net().state_dict().keys(), ndarrays)
-            state_dict = OrderedDict({k: torch.tensor(v) for k, v in params_dict})
-            
-            for client, fit_ins in client_instructions:
-                fit_ins.config["current_round"] = server_round
-                cid = int(client.cid) % NUM_CLIENTS
-                recorder.save_client_model(state_dict, cid, server_round, "start")
+        # 儲存該輪的全域模型 (start)
+        ndarrays = fl.common.parameters_to_ndarrays(parameters)
+        params_dict = zip(Net().state_dict().keys(), ndarrays)
+        state_dict = OrderedDict({k: torch.tensor(v) for k, v in params_dict})
+        recorder.save_global_start_model(state_dict, server_round)
             
         return client_instructions
 
