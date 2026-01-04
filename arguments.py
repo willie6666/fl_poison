@@ -10,6 +10,8 @@ SAMPLE_SIZE: int = 2500      # 每個 Client 的樣本數
 NUM_ROUNDS: int = 7         # 總訓練輪數
 NUM_CLIENTS: int = 50        # 總 Client 數量
 ROUND_CLIENT_NUM: int = 10   # 每輪參與訓練的 Client 數量
+NUM_CPUS: int = 1            # 每個 Client 使用的 CPU 核心數
+NUM_GPUS: float = 0.25       # 每個 Client 使用的 GPU 數量
 
 # --- 訓練超參數 ---
 BATCH_SIZE: int = 16

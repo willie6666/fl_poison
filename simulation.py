@@ -59,5 +59,5 @@ def start_fl_simulation(malicious_clients: list) -> None:
             min_fit_clients=ROUND_CLIENT_NUM,
             fraction_evaluate=0.0
         ),
-        client_resources={"num_cpus": 1, "num_gpus": 1},
+        client_resources={"num_cpus": NUM_CPUS, "num_gpus": NUM_GPUS},
     )
